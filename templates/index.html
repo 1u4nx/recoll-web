@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Recoll Web">
+        <meta name="author" content="lu4nx">
+        <title>Recoll Web</title>
+
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <style>
+         .bd-placeholder-img {
+             font-size: 1.125rem;
+             text-anchor: middle;
+             -webkit-user-select: none;
+             -moz-user-select: none;
+             -ms-user-select: none;
+             user-select: none;
+         }
+
+         @media (min-width: 768px) {
+             .bd-placeholder-img-lg {
+                 font-size: 3.5rem;
+             }
+         }
+        </style>
+    </head>
+
+    <body class="py-4">
+        <div class="container">
+            <h1>Recoll Web</h1>
+            <p class="lead">Finds your documents</p>
+
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </div>
+                        {% if keyword %}
+                        <input name="q" type="text" class="form-control" placeholder="SEARCH" />
+                        {% else %}
+                        <input name="q" type="text" class="form-control" placeholder="{{keyword}}" />
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+
+            {% if doc_total %}
+            <p>About <strong>{{doc_total}}</strong> results</p>
+            <hr class="my-4"></hr>
+            {% endif %}
+
+            {% for doc in search_results %}
+            <h5><a href="{{doc.download_url}}">{{doc.url}}</a> - {{doc.title}}</h5>
+            <p>{{doc.snippet}}</p>
+            {% endfor %}
+
+            {% if page %}
+            <hr class="my-4"></hr>
+            <p>
+                {% if page > 1 %}
+                <a href="?q={{keyword}}&page={{page - 1}}">Previous</a> |
+                {% endif %}
+
+                {% if doc_total / per_page_max >= page %}
+                <a href="?q={{keyword}}&page={{page + 1}}">Next</a>
+                {% endif %}
+            </p>
+            {% endif %}
+            <hr class="my-4"></hr>
+            <p><center><a href="https://github.com/1u4nx/" target="_blank">Github</a></center></p>
+    </body>
+</html>

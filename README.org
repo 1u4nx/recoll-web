@@ -1,0 +1,12 @@
+* Recoll-Web
+Recoll-Web is a Flask-based web interface for Recoll text search tool
+
+* Installation
+Install the docker/docker-compose on Linux:
+
+#+begin_example
+  $ sudo docker-compose build
+
+  $ sudo docker-compose up -d
+#+end_example
+

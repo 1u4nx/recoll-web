@@ -1,0 +1,10 @@
+services:
+  recoll_web:
+    build: .
+    container_name: recoll_web
+    privileged: true
+    ports:
+      - '127.0.0.1:7000:80'
+    volumes:
+      - .:/home/app
+      - ./doc:/home/app/static/doc
