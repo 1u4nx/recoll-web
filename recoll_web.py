@@ -77,6 +77,8 @@ def home():
 
     highlight_handler = HighLight()
 
+    page_total = int(doc_total / per_page_max)
+
     for _ in search_results:
         _.url = basename(_.url)
         _.download_url = f"/static/doc/{_.url}"
@@ -85,6 +87,7 @@ def home():
     return render_template("index.html",
                            doc_total=doc_total,
                            page=page,
+                           page_total=page_total,
                            keyword=keyword,
                            per_page_max=per_page_max,
                            search_results=search_results)

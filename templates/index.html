@@ -59,16 +59,19 @@
             {% if page %}
             <hr class="my-4"></hr>
             <p>
+                Showing {{page}} to {{page_total}} of {{doc_total}} entries
+            </p>
+            <p>
                 {% if page > 1 %}
                 <a href="?q={{keyword}}&page={{page - 1}}">Previous</a> |
                 {% endif %}
 
-                {% if doc_total / per_page_max >= page %}
+                {% if page_total > page %}
                 <a href="?q={{keyword}}&page={{page + 1}}">Next</a>
                 {% endif %}
             </p>
             {% endif %}
             <hr class="my-4"></hr>
-            <p><center><a href="https://github.com/1u4nx/" target="_blank">Github</a></center></p>
+            <p><center><a href="https://github.com/1u4nx/recoll-web" target="_blank">Github</a></center></p>
     </body>
 </html>
