@@ -1,18 +1,29 @@
 # coding=utf-8
 
 import subprocess
-from os import system
 from os.path import basename
 from recoll import recoll
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
+
+def recollindex():
+    subprocess.Popen(["recollindex"])
+
+
 try:
     db = recoll.connect()
     query = db.query()
 except OSError:
-    system("recollindex")
+    recollindex()
+
+
+def compute_page_total(doc_total, per_page_max):
+    if doc_total <= 0:
+        return 0
+
+    return int(doc_total / per_page_max)
 
 
 class HighLight(object):
@@ -42,6 +53,7 @@ def home():
         return "`page` error, please give a integer."
 
     offset = (page - 1) * per_page_max
+
     try:
         doc_total = query.execute(keyword, fetchtext=True)
     except ValueError as err:
@@ -63,13 +75,10 @@ def home():
 
     try:
         search_results = query.fetchmany(per_page_max)
-    except AttributeError:
-        return render_template("index.html",
-                               doc_total=0,
-                               keyword=keyword,
-                               page=0)
 
-    if not search_results:
+        if not search_results:
+            raise AttributeError
+    except AttributeError:
         return render_template("index.html",
                                doc_total=0,
                                keyword=keyword,
@@ -77,7 +86,7 @@ def home():
 
     highlight_handler = HighLight()
 
-    page_total = int(doc_total / per_page_max)
+    page_total = compute_page_total(doc_total, per_page_max)
 
     for _ in search_results:
         _.url = basename(_.url)
@@ -95,7 +104,7 @@ def home():
 
 @app.route("/update_index")
 def get():
-    subprocess.Popen(["recollindex"])
+    recollindex()
     return "update index..."
 
 
